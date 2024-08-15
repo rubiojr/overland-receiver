@@ -15,12 +15,13 @@ import (
 
 func main() {
 	dir := flag.String("dir", "", "The directory to save files. Defaults to the current dir")
+	address := flag.String("listen", ":3111", "Service listen address")
 	flag.Parse()
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Post("/", savePayload(*dir))
-	if err := http.ListenAndServe(":3111", r); err != nil {
+	if err := http.ListenAndServe(*address, r); err != nil {
 		fmt.Println(err)
 	}
 }
