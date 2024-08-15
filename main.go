@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"time"
 
 	"flag"
@@ -34,8 +35,12 @@ func savePayload(dir string) func(http.ResponseWriter, *http.Request) {
 			return
 		}
 
-		fileName := fmt.Sprintf("%s/overland-%d.geojson", dir, time.Now().UnixNano())
-		err = os.WriteFile(fileName, body, 0644)
+		today := time.Now().Format("2006/01/2")
+		destDir := filepath.Join(dir, today)
+		os.MkdirAll(destDir, 0755)
+		fileName := fmt.Sprintf("overland-%d.geojson", time.Now().UnixNano())
+		dest := filepath.Join(destDir, fileName)
+		err = os.WriteFile(dest, body, 0644)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error writing file: %s\n", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
