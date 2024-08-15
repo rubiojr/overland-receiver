@@ -10,7 +10,7 @@ This is a simple receiver for the [Overland](https://github.com/aaronpk/Overland
 make install
 ```
 
-It will install a systemd service user service unit that will start the receiver on boot.
+It will install a systemd user service unit that will start the receiver on boot.
 
 ## Usage
 
