@@ -34,9 +34,10 @@ func savePayload(dir string) func(http.ResponseWriter, *http.Request) {
 			return
 		}
 
-		fileName := fmt.Sprintf("%d/overland-%d.geojson", dir, time.Now().UnixNano())
+		fileName := fmt.Sprintf("%s/overland-%d.geojson", dir, time.Now().UnixNano())
 		err = os.WriteFile(fileName, body, 0644)
 		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error writing file: %s\n", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -44,5 +45,6 @@ func savePayload(dir string) func(http.ResponseWriter, *http.Request) {
 		//w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`{"result": "ok"}`))
+		fmt.Println("Saved file:", fileName)
 	}
 }
